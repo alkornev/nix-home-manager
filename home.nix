@@ -4,6 +4,7 @@ in {
   home = {
     packages = with pkgs; [
       hello
+      home-manager
     ];
     
     inherit username; 
