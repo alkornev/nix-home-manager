@@ -1,6 +1,8 @@
-{ lib, pkgs, ... }: let
+{ lib, pkgs, ... }:
+let
   username = "aalkornev";
-in {
+in
+{
   home = {
     packages = with pkgs; [
       hello

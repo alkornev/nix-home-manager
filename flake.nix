@@ -9,7 +9,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs =
+    { nixpkgs, home-manager, ... }:
     let
       lib = nixpkgs.lib;
       system = {
@@ -17,12 +18,15 @@
         darwin = "x86_64-darwin";
       };
 
-      mkHomeConfig = system: home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs { inherit system; };
-        modules = [ ./home.nix ];
-      };
+      mkHomeConfig =
+        system:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs { inherit system; };
+          modules = [ ./home.nix ];
+        };
 
-    in {
+    in
+    {
       homeConfigurations = {
         "aalkornev@Darwin" = mkHomeConfig system.darwin;
         "aalkornev@Linux" = mkHomeConfig system.linux;
