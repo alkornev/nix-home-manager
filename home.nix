@@ -1,15 +1,16 @@
-{ lib, pkgs, ... }: let 
+{ lib, pkgs, ... }: let
   username = "aalkornev";
 in {
   home = {
     packages = with pkgs; [
       hello
       home-manager
+      nixfmt
     ];
-    
-    inherit username; 
-    homeDirectory = "/home/${username}";
-    
+
+    inherit username;
+    homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
+
     file = {
       "hello.txt" = {
         text = ''

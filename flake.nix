@@ -9,18 +9,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  
   outputs = { nixpkgs, home-manager, ... }:
     let
       lib = nixpkgs.lib;
-      system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+      system = {
+        linux = "x86_64-linux";
+        darwin = "x86_64-darwin";
+      };
+
+      mkHomeConfig = system: home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs { inherit system; };
+        modules = [ ./home.nix ];
+      };
+
     in {
       homeConfigurations = {
-        aalkornev = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ ./home.nix ];
-        };
+        "aalkornev@Darwin" = mkHomeConfig system.darwin;
+        "aalkornev@Linux" = mkHomeConfig system.linux;
       };
     };
 }
