@@ -14,7 +14,7 @@ in {
       pkgs.home-manager
       pkgs.htop
       pkgs.neovim
-      
+      pkgs.python3
     ];
     
     inherit username; 
