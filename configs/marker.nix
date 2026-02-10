@@ -1,4 +1,4 @@
-{ lib, config, ... }: 
+{ lib, config, ... }:
 let
   markerType = lib.types.submodule {
     options = {
@@ -8,26 +8,66 @@ let
       };
 
       style.label = lib.mkOption {
-        type = lib.types.nullOr
-          (lib.types.strMatching "[A-Z0-9]");
+        type = lib.types.nullOr (lib.types.strMatching "[A-Z0-9]");
         default = null;
+      };
+
+      style.color = lib.mkOption {
+        type = colorType;
+        default = "red";
+      };
+
+      style.size = lib.mkOption {
+        type = lib.types.enum
+          [ "tiny" "small" "medium" "large" ];
+        default = "medium";
       };
     };
   };
 
-  userType = lib.types.submodule {
+  userType = lib.types.submodule ({ name, ... }: {
     options = {
       departure = lib.mkOption {
+        type = markerType;
+        default = { };
+      };
+
+      arrival = lib.mkOption {
         type = markerType;
         default = {};
       };
     };
-  };
-in {
+
+    config = {
+      departure.style.label = lib.mkDefault
+        (firstUpperAlnum name);
+
+      arrival.style.label = lib.mkDefault
+        (firstUpperAlnum name);
+      };
+    });
+
+  firstUpperAlnum = str:
+    lib.mapNullable lib.head
+    (builtins.match "[^A-Z0-9]*([A-Z0-9]).*"
+    (lib.toUpper str));
+
+
+  colorType = lib.types.either
+    (lib.types.strMatching "0x[0-9A-F]{6}")
+    (lib.types.enum [
+      "black" "brown" "green" "purple" "yellow"
+      "blue" "gray" "orange" "red" "white" ]);
+
+in
+{
+  imports = [
+    ./path.nix
+  ];
   options = {
-   users = lib.mkOption {
-     type = lib.types.attrsOf userType;
-   };
+    users = lib.mkOption {
+      type = lib.types.attrsOf userType;
+    };
 
     map.markers = lib.mkOption {
       type = lib.types.listOf markerType;
@@ -36,35 +76,39 @@ in {
 
   config = {
     users.a.departure.location = "new york";
+    users.a.arrival.location = "san francisco";
+    users.a.departure.style.color = "blue";
     users.b.departure.location = "switzerland";
 
-    map.markers = lib.filter
-      (marker: marker.location != null)
-      (lib.concatMap (user: [
-         user.departure
-      ]) (lib.attrValues config.users));
+    map.markers = lib.filter (marker: marker.location != null) (
+      lib.concatMap (user: [
+        user.departure user.arrival
+      ]) (lib.attrValues config.users)
+    );
 
-    map.center = lib.mkIf 
-      (lib.length config.map.markers >= 1)
-      null;
+    map.center = lib.mkIf (lib.length config.map.markers >= 1) null;
 
-    map.zoom = lib.mkIf
-      (lib.length config.map.markers >= 2)
-      null;
+    map.zoom = lib.mkIf (lib.length config.map.markers >= 2) null;
 
-    requestParams = let
-      paramForMarker = marker:
-        let
-          attributes = 
-            lib.optional (marker.style.label != null)
-            "label:${marker.style.label}"
+    requestParams =
+      let
+        paramForMarker =
+          marker:
+          let
+            size = {
+              tiny = "tiny";
+              small = "small";
+              medium = "mid";
+              large = null;
+            }.${marker.style.size};
+            attributes = lib.optional (marker.style.label != null) "label:${marker.style.label}"
+            ++ lib.optional (size != null) "size:${size}"
             ++ [
-              "$(${config.scripts.geocode}/bin/geocode ${
-                lib.escapeShellArg marker.location
-              })"
+              "color:${marker.style.color}" "$(${config.scripts.geocode}/bin/geocode ${lib.escapeShellArg marker.location})"
             ];
-        in "markers=\"${lib.concatStringsSep "|" attributes}\"";
+          in
+          "markers=\"${lib.concatStringsSep "|" attributes}\"";
       in
-        builtins.map paramForMarker config.map.markers;
+      builtins.map paramForMarker config.map.markers;
   };
 }
