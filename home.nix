@@ -5,6 +5,8 @@ in {
   imports = [
     ./modules/zsh.nix
     ./modules/git.nix
+    ./modules/starship.nix
+    ./modules/fonts.nix
   ];
 
   home = {
@@ -12,6 +14,7 @@ in {
       pkgs.home-manager
       pkgs.htop
       pkgs.neovim
+      
     ];
     
     inherit username; 
