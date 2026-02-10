@@ -1,4 +1,3 @@
-{ ... }:
 {
   programs.zsh = {
     enable = true;
@@ -6,7 +5,10 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     
-    shellAliases = { vim = "nvim" };
+    shellAliases = { 
+      vim = "nvim"; 
+      ll = "ls -la";
+    };
 
     oh-my-zsh = {
       enable = true;
