@@ -23,7 +23,6 @@
     historySubstringSearch.enable = true;
 
     shellAliases = {
-      vim = "nvim";
       ll = "ls -la";
     };
 
