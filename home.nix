@@ -1,13 +1,18 @@
 { lib, pkgs, ... }: let 
   username = "aalkornev";
+  modulePaths = lib.fileset.toList (lib.fileset.fileFilter (file: file.hasExt "nix") ./modules);
 in {
-
-  imports = [
-    ./modules/zsh.nix
-    ./modules/git.nix
-    ./modules/starship.nix
-    ./modules/fonts.nix
-  ];
+  imports = lib.traceSeq modulePaths modulePaths;
+  #[
+    #./modules/*.nix
+    #./modules/zsh.nix
+    # ./modules/git.nix
+    # ./modules/starship.nix
+    #./modules/fonts.nix
+  #];
+  # home.sessionVariables = {
+  #   SHELL = "${pkgs.zsh}/bin/zsh";
+  # };
 
   home = {
     packages = [
