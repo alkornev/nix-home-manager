@@ -1,0 +1,5 @@
+{
+  programs.python = {
+    enable = true;
+  };
+}
