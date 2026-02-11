@@ -19,17 +19,17 @@
       };
 
       mkHomeConfig =
-        system:
+        system: extraModules:
         home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs { inherit system; };
-          modules = [ ./home.nix ];
+          modules = [ ./home.nix ] ++ extraModules;
         };
 
     in
     {
       homeConfigurations = {
-        "aalkornev@Darwin" = mkHomeConfig system.darwin;
-        "aalkornev@Linux" = mkHomeConfig system.linux;
+        "aalkornev@Darwin" = mkHomeConfig system.darwin [ ./os/darwin.nix ];
+        "aalkornev@Linux" = mkHomeConfig system.linux [ ./os/linux.nix ];
       };
     };
 }
