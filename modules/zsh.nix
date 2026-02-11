@@ -4,19 +4,35 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    
-    shellAliases = { 
-      vim = "nvim"; 
+
+    history = {
+      size = 10000000;
+      save = 10000000;
+      path = "$HOME/.cache/zsh/zhistory";
+      share = true;
+      expireDuplicatesFirst = true;
+      ignoreDups = true;
+      ignoreAllDups = true;
+      findNoDups = true;
+      saveNoDups = true;
+      # findDups = true;
+      ignoreSpace = true;
+      extended = true;
+    };
+
+    historySubstringSearch.enable = true;
+
+    shellAliases = {
+      vim = "nvim";
       ll = "ls -la";
     };
 
     oh-my-zsh = {
       enable = true;
-      plugins = [ 
-        "git" 
-        "sudo" 
+      plugins = [
+        "git"
+        "sudo"
       ];
-      theme = "robbyrussell";
     };
     antidote = {
       enable = true;
@@ -27,6 +43,12 @@
         "zsh-users/zsh-completions"
       ];
     };
+     initContent = ''
+      # Additional history options not covered by Home Manager
+      setopt HIST_REDUCE_BLANKS     # Remove superfluous blanks before recording entry.
+      setopt HIST_VERIFY            # Don't execute immediately upon history expansion.
+      setopt HIST_BEEP              # Beep when accessing nonexistent history
+     '';
   };
 }
 
