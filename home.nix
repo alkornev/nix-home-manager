@@ -1,14 +1,16 @@
-{ lib, pkgs, ... }: let 
+{ lib, pkgs, ... }:
+let
   username = "aalkornev";
   modulePaths = lib.fileset.toList (lib.fileset.fileFilter (file: file.hasExt "nix") ./modules);
-in {
+in
+{
   imports = lib.traceSeq modulePaths modulePaths;
   #[
-    #./modules/*.nix
-    #./modules/zsh.nix
-    # ./modules/git.nix
-    # ./modules/starship.nix
-    #./modules/fonts.nix
+  #./modules/*.nix
+  #./modules/zsh.nix
+  # ./modules/git.nix
+  # ./modules/starship.nix
+  #./modules/fonts.nix
   #];
   # home.sessionVariables = {
   #   SHELL = "${pkgs.zsh}/bin/zsh";
@@ -18,13 +20,12 @@ in {
     packages = [
       pkgs.home-manager
       pkgs.htop
-      pkgs.neovim
-      pkgs.alacritty
+      pkgs.nixfmt
     ];
-    
-    inherit username; 
+
+    inherit username;
     homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
-   
+
     stateVersion = "25.11";
   };
 }

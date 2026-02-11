@@ -9,28 +9,30 @@
 
       modifier = "Mod4"; # Super/Windows key
 
-      bars = [];
+      bars = [ ];
 
       # Keybindings
-      keybindings = let
-        modifier = "Mod4";
-      in lib.mkOptionDefault {
-        # Screen lock
-        "${modifier}+l" = "exec swaylock -f -c 000000";
+      keybindings =
+        let
+          modifier = "Mod4";
+        in
+        lib.mkOptionDefault {
+          # Screen lock
+          "${modifier}+l" = "exec swaylock -f -c 000000";
 
-        # Screenshot
-        "Print" = "exec grim -g \"$(slurp)\" - | wl-copy";
-        "${modifier}+Print" = "exec grim - | wl-copy";
+          # Screenshot
+          "Print" = "exec grim -g \"$(slurp)\" - | wl-copy";
+          "${modifier}+Print" = "exec grim - | wl-copy";
 
-        # Brightness controls
-        "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
-        "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
+          # Brightness controls
+          "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
+          "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
 
-        # Volume controls
-        "XF86AudioRaiseVolume" = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
-        "XF86AudioLowerVolume" = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
-        "XF86AudioMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
-      };
+          # Volume controls
+          "XF86AudioRaiseVolume" = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+          "XF86AudioLowerVolume" = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+          "XF86AudioMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+        };
 
       # Startup programs
       startup = [
@@ -39,7 +41,6 @@
         { command = "blueman-applet"; } # Bluetooth applet
         { command = "nm-applet --indicator"; } # Network Manager applet
       ];
-
 
       # Input configuration
       input = {
@@ -92,7 +93,11 @@
         position = "top";
         height = 34;
 
-        modules-left = [ "sway/workspaces" "sway/mode" "sway/window" ];
+        modules-left = [
+          "sway/workspaces"
+          "sway/mode"
+          "sway/window"
+        ];
         modules-center = [ ];
         modules-right = [
           "idle_inhibitor"
@@ -153,7 +158,13 @@
         "temperature" = {
           critical-threshold = 80;
           format = "{icon} {temperatureC}°C";
-          format-icons = ["󰜗" "󱃂" "󰔏" "󱃂" "󰸁"];
+          format-icons = [
+            "󰜗"
+            "󱃂"
+            "󰔏"
+            "󱃂"
+            "󰸁"
+          ];
         };
 
         "network" = {
@@ -185,7 +196,11 @@
             phone = "󰄜";
             portable = "󰄜";
             car = "󰄋";
-            default = ["󰕿" "󰖀" "󰕾"];
+            default = [
+              "󰕿"
+              "󰖀"
+              "󰕾"
+            ];
           };
           on-click = "pwvucontrol";
           tooltip-format = "{desc}, {volume}%";
@@ -359,13 +374,25 @@
   services.swayidle = {
     enable = true;
     events = [
-      { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f"; }
-      { event = "lock"; command = "${pkgs.swaylock}/bin/swaylock -f"; }
+      {
+        event = "before-sleep";
+        command = "${pkgs.swaylock}/bin/swaylock -f";
+      }
+      {
+        event = "lock";
+        command = "${pkgs.swaylock}/bin/swaylock -f";
+      }
     ];
     timeouts = [
-      { timeout = 300; command = "${pkgs.swaylock}/bin/swaylock -f"; }
-      { timeout = 600; command = "${pkgs.sway}/bin/swaymsg \"output * dpms off\"";
-        resumeCommand = "${pkgs.sway}/bin/swaymsg \"output * dpms on\""; }
+      {
+        timeout = 300;
+        command = "${pkgs.swaylock}/bin/swaylock -f";
+      }
+      {
+        timeout = 600;
+        command = "${pkgs.sway}/bin/swaymsg \"output * dpms off\"";
+        resumeCommand = "${pkgs.sway}/bin/swaymsg \"output * dpms on\"";
+      }
     ];
   };
 
@@ -381,18 +408,18 @@
   # Additional packages needed for Sway
   home.packages = with pkgs; [
     # Wayland utilities
-    wl-clipboard      # Clipboard utilities
-    grim              # Screenshot tool
-    slurp             # Screen area selector
-    wofi              # Application launcher (alternative: rofi-wayland)
-    mako              # Notification daemon
-    brightnessctl     # Brightness control
-    playerctl         # Media player control
+    wl-clipboard # Clipboard utilities
+    grim # Screenshot tool
+    slurp # Screen area selector
+    wofi # Application launcher (alternative: rofi-wayland)
+    mako # Notification daemon
+    brightnessctl # Brightness control
+    playerctl # Media player control
 
     # System control utilities
-    pwvucontrol       # Modern PipeWire volume control
-    blueman           # Bluetooth manager
-    networkmanagerapplet  # Network manager applet (nm-applet)
+    pwvucontrol # Modern PipeWire volume control
+    blueman # Bluetooth manager
+    networkmanagerapplet # Network manager applet (nm-applet)
 
     # Fonts
     # font-awesome      # For waybar icons

@@ -43,12 +43,11 @@
         "zsh-users/zsh-completions"
       ];
     };
-     initContent = ''
+    initContent = ''
       # Additional history options not covered by Home Manager
       setopt HIST_REDUCE_BLANKS     # Remove superfluous blanks before recording entry.
       setopt HIST_VERIFY            # Don't execute immediately upon history expansion.
       setopt HIST_BEEP              # Beep when accessing nonexistent history
-     '';
+    '';
   };
 }
-
