@@ -21,6 +21,7 @@ in
       pkgs.home-manager
       pkgs.htop
       pkgs.nixfmt
+      pkgs.cargo
     ];
 
     inherit username;
