@@ -31,7 +31,7 @@
       };
 
       font = {
-        size = 18;
+        size = 20;
         offset = {
           x = 0;
           y = 0;
@@ -39,6 +39,9 @@
         glyph_offset = {
           x = 0;
           y = 0;
+        };
+        normal = {
+          family = "UbuntuMono Nerd Font Mono";
         };
       };
 
