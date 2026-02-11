@@ -1,5 +1,7 @@
+{ pkgs, ... }:
 {
-  programs.python = {
-    enable = true;
-  };
+  home.packages = [
+    pkgs.python3
+    pkgs.python3Packages.pip
+  ];
 }
