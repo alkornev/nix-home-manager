@@ -35,7 +35,7 @@
       git_branch = {
         truncation_length = 32;
         truncation_symbol = "...";
-        format = "[$symbol$branch]($style)";
+        format = "[$symbol$branch]($style) ";
       };
 
       cmd_duration = {
