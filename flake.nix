@@ -29,7 +29,7 @@
     {
       homeConfigurations = {
         "aalkornev@Darwin" = mkHomeConfig system.darwin [ ./os/darwin.nix ];
-        "aalkornev@Linux" = mkHomeConfig system.linux [ ./os/linux.nix ];
+        "aalkornev@Linux" = mkHomeConfig system.linux [ ./os/linux/linux.nix ];
       };
     };
 }
