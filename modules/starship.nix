@@ -18,6 +18,7 @@
         "$git_state"
         "$git_status"
         "$line_break"
+        "$docker$character"
       ];
 
       custom.visual_divider = {
@@ -29,7 +30,7 @@
         truncation_length = 0;
         truncate_to_repo = false;
         truncation_symbol = "../";
-        style = "green";
+        style = "";
       };
 
       git_branch = {
@@ -62,7 +63,7 @@
 
       time = {
         disabled = false;
-        format = "[\\[$time\\]]($style)";
+        format = "[\\[$time\\]]($style) ";
         time_format = "%T";
         style = "yellow";
       };
