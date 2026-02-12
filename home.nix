@@ -22,6 +22,7 @@ in
       pkgs.htop
       pkgs.nixfmt
       pkgs.cargo
+      pkgs.tealdeer
     ];
 
     inherit username;
