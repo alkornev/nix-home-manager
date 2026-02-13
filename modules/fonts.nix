@@ -5,8 +5,8 @@
     enable = true;
     defaultFonts = {
       monospace = [ "UbuntuMono Nerd Font Mono" ];
-      sansSerif = [ "UbuntuMono Nerd Font" ];
-      serif = [ "UbuntuMono Nerd Font" ];
+      sansSerif = [ "Ubuntu Nerd Font" ];
+      serif = [ "Ubuntu Nerd Font" ];
     };
   };
 
