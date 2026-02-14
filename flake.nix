@@ -4,32 +4,41 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
 
+    darwin = {
+      url ="github:nix-darwin/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
+
   outputs =
     { nixpkgs, home-manager, ... }:
     let
+      username = "aalkornev";
       lib = nixpkgs.lib;
-      system = {
-        linux = "x86_64-linux";
-        darwin = "x86_64-darwin";
-      };
-
-      mkHomeConfig =
-        system: extraModules:
-        home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { inherit system; };
-          modules = [ ./home.nix ] ++ extraModules;
-        };
-
     in
     {
+      nixosConfigurations.desktop = lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [ ./hosts/desktop ];
+        specialArgs = {
+          inherit username;
+        };
+      };
+
+      # Standalone home-manager configuration
       homeConfigurations = {
-        "aalkornev@Darwin" = mkHomeConfig system.darwin [ ./os/darwin.nix ];
-        "aalkornev@Linux" = mkHomeConfig system.linux [ ./os/linux/sway.nix ];
+        "${username}@desktop" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          modules = [ ./home/linux.nix ];
+          extraSpecialArgs = {
+            inherit username;
+          };
+        };
       };
     };
 }
