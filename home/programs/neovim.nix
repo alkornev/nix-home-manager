@@ -6,7 +6,7 @@
     viAlias = true;
     vimAlias = true;
 
-    extraLuaConfig = ''
+    initLua = ''
       vim.g.editorconfig = true
       vim.opt.number = true
       vim.opt.relativenumber = true

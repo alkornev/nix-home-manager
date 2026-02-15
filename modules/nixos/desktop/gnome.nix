@@ -11,6 +11,7 @@
   environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
 
   environment.systemPackages = with pkgs; [
+    gnome-tweaks
     gnomeExtensions.dash-to-dock
     gnomeExtensions.appindicator
     gnomeExtensions.blur-my-shell
@@ -19,7 +20,7 @@
     gnomeExtensions.caffeine
     gnomeExtensions.gsconnect
     gnomeExtensions.just-perfection
-    gnomeExtensions.pop-shell
+    gnomeExtensions.paperwm
   ];
 
   # Auto-enable extensions

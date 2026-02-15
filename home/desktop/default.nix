@@ -4,30 +4,98 @@
 {
   dconf.settings = {
 
+    "org/gnome/shell" = {
+      disable-user-extensions = false;
+      enabled-extensions = [
+        "blur-my-shell@aunetx"
+        "clipboard-indicator@tudmotu.com"
+        "dash-to-dock@micxgx.gmail.com"
+        "Vitals@CoreCoding.com"
+        "paperwm@paperwm.github.com"
+        # "just-perfection-desktop@just-perfection"
+      ];
+    };
+    # Set Alacritty as default terminal
+    "org/gnome/desktop/applications/terminal" = {
+      exec = "alacritty";
+      exec-arg = "-e";
+    };
+
+    # PaperWM specific settings
+    "org/gnome/shell/extensions/paperwm" = {
+      # Window gaps
+      window-gap = 8;
+
+      # Disable top bar styling if you prefer stock GNOME
+      override-panel-styling = false;
+
+      # Animation time in ms
+      animation-time = 0.15;
+
+      # Gesture options
+      gesture-enabled = true;
+
+      # Show window position bar
+      show-window-position-bar = true;
+    };
+
+
+    # Favorite apps
+    "org/gnome/shell" = {
+      favorite-apps = [
+        "firefox.desktop"
+        "org.gnome.Nautilus.desktop"
+        "Alacritty.desktop"
+      ];
+    };
+
+    # Disable the dock's Super+q keybinding
+    "org/gnome/shell/extensions/dash-to-dock" = {
+      hot-keys = false;  # Disables all dock hotkeys including Super+q
+      extend-height = false;
+      dock-fixed = true;           # Don't reserve space permanently
+    };
+
+    "org/gnome/shell/extensions/paperwm/keybindings" = {
+      new-window = [];  # Disable the new-window keybinding
+    };
+
+    "org/gnome/desktop/wm/keybindings" = {
+      close = ["<Super>q"];
+      toggle-maximized = ["<Super>m"];
+    };
+
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      terminal = ["<Super>Return"];
+    };
+
     # Interface fonts
     "org/gnome/desktop/interface" = {
       # Main UI font
-      font-name = "Ubuntu 13";
+      font-name = "Ubuntu Nerd Font 11";
 
       # Document viewer font
-      document-font-name = "Ubuntu 13";
+      document-font-name = "Ubuntu Nerd Font 11";
 
       # Terminal and code font
-      monospace-font-name = "Ubuntu Mono 13";
+      monospace-font-name = "UbuntuMono Nerd Font Mono 11";
 
       # Font rendering options
       font-antialiasing = "rgba";     # Smooth fonts
       font-hinting = "slight";        # Slight hinting
       font-rgba-order = "rgb";        # Subpixel order
+
+      clock-show-seconds = true;
+      clock-show-weekday = true;
     };
 
     # Window title font
     "org/gnome/desktop/wm/preferences" = {
-      titlebar-font = "Ubuntu Bold 13";
+      titlebar-font = "Ubuntu Nerd Font Bold 13";
     };
 
     "org/gnome/desktop/peripherals/mouse" = {
-      natural-scroll = false;
+      natural-scroll = true;
       speed = 0.0;
       accel-profile = "default";
     };
@@ -38,8 +106,8 @@
     enable = true;
 
     font = {
-      name = "Ubuntu";
-      size = 13;
+      name = "Ubuntu Nerd Font";
+      size = 11;
     };
   };
 }

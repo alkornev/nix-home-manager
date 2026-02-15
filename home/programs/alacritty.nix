@@ -22,7 +22,11 @@
           x = 0;
           y = 0;
         };
-        startup_mode = "Maximized";
+        # startup_mode = "Maximized";
+        dimensions = {
+          columns = 100;
+          lines = 45;
+        };
       };
 
       scrolling = {
