@@ -1,5 +1,5 @@
 # home/desktop/gnome.nix
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   dconf.settings = {
@@ -20,6 +20,13 @@
       exec = "alacritty";
       exec-arg = "-e";
     };
+
+
+    "org/gnome/desktop/peripherals/keyboard" = {
+      delay = lib.hm.gvariant.mkUint32 225;      # 15 * 15ms = 225ms (matches macOS InitialKeyRepeat 15)
+      repeat-interval = lib.hm.gvariant.mkUint32 15;  # 1 * 15ms = 15ms (matches macOS KeyRepeat 1)
+    };
+
 
     # PaperWM specific settings
     "org/gnome/shell/extensions/paperwm" = {
@@ -94,11 +101,6 @@
       titlebar-font = "Ubuntu Nerd Font Bold 13";
     };
 
-    "org/gnome/desktop/peripherals/mouse" = {
-      natural-scroll = true;
-      speed = 0.0;
-      accel-profile = "default";
-    };
   };
 
   # GTK font settings

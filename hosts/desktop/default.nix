@@ -16,6 +16,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.configurationLimit = 3;
+  boot.supportedFilesystems = [ "ntfs" ];
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages;
@@ -52,8 +53,9 @@
 
   # Configure keymap in X11
   services.xserver.xkb = {
-    layout = "us";
+    layout = "us,ru";
     variant = "";
+    options = "grp:alt_shift_toggle";
   };
 
   security.sudo.wheelNeedsPassword = false;
@@ -89,7 +91,6 @@
     htop
     just
     direnv
-    firefox
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -11,6 +11,7 @@
     packages = [
       pkgs.home-manager
       pkgs.htop
+      pkgs.unzip
       pkgs.nixfmt
       pkgs.cargo
       pkgs.tealdeer

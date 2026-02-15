@@ -8,5 +8,6 @@
     ./python.nix
     ./starship.nix
     ./zsh.nix
+    ./firefox.nix
   ];
 }
