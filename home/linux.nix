@@ -7,6 +7,12 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
+
   home = {
     packages = [
       pkgs.home-manager
