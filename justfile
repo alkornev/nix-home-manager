@@ -4,6 +4,10 @@ home:
 desktop:
   sudo nixos-rebuild switch --flake .#desktop --impure
 
+darwin:
+  sudo darwin-rebuild switch --flake .#mac-intel --impure
+
+
 update:
   nix flake update
 

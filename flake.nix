@@ -4,10 +4,11 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
 
-    darwin = {
+    nix-darwin = {
       url ="github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -16,12 +17,22 @@
   };
 
   outputs =
-    { nixpkgs, home-manager, ... }:
+    { self, nixpkgs, home-manager, nix-darwin, ... }:
     let
       username = "aalkornev";
       lib = nixpkgs.lib;
     in
     {
+
+      darwinConfigurations."intel-mac" = nix-darwin.lib.darwinSystem {
+        system = "x86_64-darwin";
+        modules = [ ./hosts/darwin ];
+        specialArgs = {
+          inherit username;
+        };
+      };
+
+
       nixosConfigurations.desktop = lib.nixosSystem {
         system = "x86_64-linux";
         modules = [ ./hosts/desktop ];
@@ -39,6 +50,15 @@
             inherit username;
           };
         };
+
+        "${username}@intel-mac" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-darwin;
+          modules = [ ./home/darwin.nix ];
+          extraSpecialArgs = {
+            inherit username;
+          };
+        };
+
       };
     };
 }
