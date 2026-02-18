@@ -6,12 +6,12 @@
       keyboard.bindings = [
         {
           key = "C";
-          mods = "Control";
+          mods = "Super";
           action = "Copy";
         }
         {
           key = "V";
-          mods = "Control";
+          mods = "Super";
           action = "Paste";
         }
       ];
@@ -35,7 +35,7 @@
       };
 
       font = {
-        size = 20;
+        size = 18;
         offset = {
           x = 0;
           y = 0;

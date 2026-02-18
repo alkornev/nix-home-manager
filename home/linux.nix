@@ -26,6 +26,9 @@
       pkgs.steam
       pkgs.discord
       pkgs.spotify
+
+      pkgs.wineWow64Packages.waylandFull
+      pkgs.winetricks
     ];
 
     inherit username;
