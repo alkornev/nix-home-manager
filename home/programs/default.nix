@@ -10,5 +10,7 @@
     ./zsh.nix
     ./firefox.nix
     ./vscode.nix
+    #./tmux.nix
+    ./zellij.nix
   ];
 }

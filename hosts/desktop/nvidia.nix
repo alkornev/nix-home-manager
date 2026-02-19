@@ -1,11 +1,18 @@
 { config, pkgs, ... }:
 {
+  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.kernelParams = [
+    "nvidia.NVreg_DynamicPowerManagement=2"
+    "nvidia.NVreg_TemporaryFilePath=/var/tmp"
+  ];
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # Enable OpenGL
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
   };
 
   # Load nvidia driver for Xorg and Wayland

@@ -1,20 +1,24 @@
 {
   programs.alacritty = {
     enable = true;
-    settings.terminal.shell.program = "zsh";
     settings = {
-      keyboard.bindings = [
-        {
-          key = "C";
-          mods = "Super";
-          action = "Copy";
-        }
-        {
-          key = "V";
-          mods = "Super";
-          action = "Paste";
-        }
-      ];
+      terminal.shell = {
+        program = "zsh";
+        args = [ "--login" ];
+      };
+
+      # keyboard.bindings = [
+      #   {
+      #     key = "C";
+      #     mods = "Super";
+      #     action = "Copy";
+      #   }
+      #   {
+      #     key = "V";
+      #     mods = "Super";
+      #     action = "Paste";
+      #   }
+      # ];
 
       window = {
         dynamic_title = true;

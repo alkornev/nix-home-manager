@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
     ./gnome.nix
     ./nvidia.nix
+    ./virtualization.nix
     /etc/nixos/hardware-configuration.nix
     ];
 
@@ -17,6 +18,20 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.configurationLimit = 3;
   boot.supportedFilesystems = [ "ntfs" ];
+  boot.kernelParams = [
+    "quiet"
+    "splash"
+  ];
+
+
+  boot.consoleLogLevel = 0;
+  boot.initrd.verbose = false;
+
+  boot.plymouth = {
+    enable = true;
+    theme = "nixos-bgrt";
+    themePackages = [ pkgs.nixos-bgrt-plymouth ];
+  };
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages;
@@ -64,8 +79,9 @@
   users.users.${username} = {
     isNormalUser = true;
     description = "Aleksei";
-    extraGroups = [ "docker" "networkmanager" "wheel" "rtkit" "audio" "video" "seat" ];
+    extraGroups = [ "networkmanager" "wheel" "rtkit" "audio" "video" "render" "seat" ];
     packages = with pkgs; [];
+    shell = pkgs.zsh;
   };
 
   # Use zsh system-wide
@@ -74,11 +90,6 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Enable OpenGL
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
 
   # Enable Nix Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -91,6 +102,9 @@
     htop
     just
     direnv
+    nvidia-container-toolkit
+    pciutils
+    mesa-demos
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
