@@ -18,7 +18,7 @@
         "$git_state"
         "$git_status"
         "$line_break"
-        "$docker$character"
+        "$docker_context$character"
       ];
 
       custom.visual_divider = {
