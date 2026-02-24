@@ -1,13 +1,15 @@
 { config, pkgs, ... }:
 {
-  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.initrd.kernelModules = [
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_uvm"
+    "nvidia_drm"
+  ];
   boot.kernelParams = [
     "nvidia.NVreg_DynamicPowerManagement=2"
     "nvidia.NVreg_TemporaryFilePath=/var/tmp"
   ];
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # Enable OpenGL
   hardware.graphics = {
@@ -16,7 +18,7 @@
   };
 
   # Load nvidia driver for Xorg and Wayland
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
 
@@ -42,7 +44,7 @@
     open = true;
 
     # Enable the Nvidia settings menu,
-	  # accessible via `nvidia-settings`.
+    # accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.

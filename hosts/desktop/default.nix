@@ -2,27 +2,31 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, username, ... }:
+{
+  config,
+  pkgs,
+  username,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
+  imports = [
+    # Include the results of the hardware scan.
     ./gnome.nix
     ./nvidia.nix
     ./virtualization.nix
     /etc/nixos/hardware-configuration.nix
-    ];
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub.configurationLimit = 3;
   boot.supportedFilesystems = [ "ntfs" ];
   boot.kernelParams = [
     "quiet"
     "splash"
   ];
-
 
   boot.consoleLogLevel = 0;
   boot.initrd.verbose = false;
@@ -50,10 +54,8 @@
     options = "--delete-older-than 7d";
   };
 
-
   # Enable networking
   networking.networkmanager.enable = true;
-
 
   # Enable Bluetooth
   hardware.bluetooth.enable = true;
@@ -79,8 +81,16 @@
   users.users.${username} = {
     isNormalUser = true;
     description = "Aleksei";
-    extraGroups = [ "networkmanager" "wheel" "rtkit" "audio" "video" "render" "seat" ];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "rtkit"
+      "audio"
+      "video"
+      "render"
+      "seat"
+    ];
+    packages = with pkgs; [ ];
     shell = pkgs.zsh;
   };
 
@@ -90,9 +100,11 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-
   # Enable Nix Flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -105,6 +117,7 @@
     nvidia-container-toolkit
     pciutils
     mesa-demos
+    wsdd
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
