@@ -29,6 +29,8 @@
 
       pkgs.wineWow64Packages.waylandFull
       pkgs.winetricks
+      pkgs.opencode
+      pkgs.claude-code
     ];
 
     inherit username;
