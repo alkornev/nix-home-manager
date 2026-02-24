@@ -5,7 +5,7 @@ desktop:
   sudo nixos-rebuild switch --flake .#desktop --impure
 
 darwin:
-  sudo darwin-rebuild switch --flake .#mac-intel --impure
+  sudo darwin-rebuild switch --flake .#intel-mac --impure
 
 
 update:
