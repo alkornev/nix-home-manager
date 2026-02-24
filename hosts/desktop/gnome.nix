@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   services.displayManager.gdm.enable = true;
+  services.displayManager.gdm.autoSuspend = false;
   services.desktopManager.gnome.enable = true;
 
   # To disable installing GNOME's suite of applications
@@ -8,7 +9,10 @@
   # services.gnome.core-apps.enable = true;
   # services.gnome.core-developer-tools.enable = false;
   # services.gnome.games.enable = false;
-  environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
+  environment.gnome.excludePackages = with pkgs; [
+    gnome-tour
+    gnome-user-docs
+  ];
 
   environment.systemPackages = with pkgs; [
     gnome-tweaks
