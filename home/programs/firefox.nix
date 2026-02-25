@@ -1,6 +1,6 @@
-{pkgs, ... }:
+{ pkgs, ... }:
 {
-  programs.firefox= {
+  programs.firefox = {
     enable = true;
     package = pkgs.firefox-bin;
     profiles.default.settings = {

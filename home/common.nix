@@ -10,6 +10,8 @@
       pkgs.cargo
       pkgs.tealdeer
       pkgs.just
+      pkgs.fd
+      pkgs.fzf
 
       pkgs.discord
       pkgs.spotify

@@ -1,15 +1,15 @@
-{ pkgs, username, ... }: {
+{ pkgs, username, ... }:
+{
   # System packages
   environment.systemPackages = with pkgs; [
     vim
     git
+    orbstack
   ];
-
 
   nixpkgs.config.allowUnfree = true;
 
   networking.hostName = "intel-mac"; # Define your hostname.
-
 
   # users.users.${username} = {
   #   home = "/Users/${username}";
@@ -20,7 +20,10 @@
   # system.defaults.finder.AppleShowAllExtensions = true;
 
   # Enable nix-daemon
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Set your shell
   programs.zsh.enable = true;

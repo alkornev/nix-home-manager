@@ -1,11 +1,17 @@
-{ config, pkgs, lib, username, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  username,
+  ...
+}:
 {
 
   virtualisation.containers.enable = true;
 
   virtualisation.podman = {
     enable = true;
-    dockerCompat = true;   # optional: adds a `docker` alias
+    dockerCompat = true; # optional: adds a `docker` alias
     defaultNetwork.settings.dns_enabled = true;
   };
 
@@ -24,7 +30,17 @@
 
   hardware.nvidia-container-toolkit.enable = true;
   users.users.${username} = {
-    subUidRanges = [{ startUid = 100000; count = 65536; }];
-    subGidRanges = [{ startGid = 100000; count = 65536; }];
+    subUidRanges = [
+      {
+        startUid = 100000;
+        count = 65536;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 100000;
+        count = 65536;
+      }
+    ];
   };
 }
