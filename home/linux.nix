@@ -3,6 +3,7 @@
   imports = [
     ./programs
     ./desktop
+    ./common.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -15,22 +16,10 @@
 
   home = {
     packages = [
-      pkgs.home-manager
-      pkgs.htop
-      pkgs.unzip
-      pkgs.nixfmt
-      pkgs.cargo
-      pkgs.tealdeer
-      pkgs.just
-
       pkgs.steam
-      pkgs.discord
-      pkgs.spotify
 
       pkgs.wineWow64Packages.waylandFull
       pkgs.winetricks
-      pkgs.opencode
-      pkgs.claude-code
     ];
 
     inherit username;

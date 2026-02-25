@@ -1,24 +1,26 @@
-{ lib, pkgs, username, ... }:
+{
+  lib,
+  pkgs,
+  username,
+  ...
+}:
 {
   imports = [
     ./programs
+    ./common.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
 
+  targets.darwin.defaults = {
+    NSGlobalDomain = {
+      InitialKeyRepeat = 15;
+      KeyRepeat = 1;
+    };
+  };
+
   home = {
     packages = [
-      pkgs.home-manager
-      pkgs.htop
-      pkgs.unzip
-      pkgs.nixfmt
-      pkgs.cargo
-      pkgs.tealdeer
-      pkgs.just
-
-      # pkgs.steam
-      # pkgs.discord
-      # pkgs.spotify
     ];
 
     inherit username;
