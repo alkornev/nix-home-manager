@@ -97,6 +97,15 @@
 
   };
 
+  # PaperWM copies metadata.json and user.css from the Nix store with read-only
+  # permissions (444). This activation script ensures they are writable so
+  # PaperWM can update them at runtime.
+  home.activation.paperwmWritable = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if [ -d "$HOME/.config/paperwm" ]; then
+      chmod -f u+w "$HOME/.config/paperwm/metadata.json" "$HOME/.config/paperwm/user.css" || true
+    fi
+  '';
+
   # GTK font settings
   gtk = {
     enable = true;

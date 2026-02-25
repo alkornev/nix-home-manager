@@ -31,7 +31,6 @@
       plugins = [
         "git"
         "sudo"
-        "fd"
         "fzf"
         "docker"
         "docker-compose"
@@ -46,7 +45,6 @@
         "zsh-users/zsh-history-substring-search"
         "zsh-users/zsh-autosuggestions"
         "zsh-users/zsh-completions"
-        "thuandt/zsh-pipx"
       ];
     };
     initContent = ''

@@ -40,6 +40,9 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages;
 
+  # Load fan controller module for MSI MPG X870E CARBON WIFI (Nuvoton NCT6687D)
+  boot.kernelModules = [ "nct6683" ];
+
   networking.hostName = "desktop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -118,6 +121,7 @@
     pciutils
     mesa-demos
     wsdd
+    lm_sensors
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

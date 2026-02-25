@@ -15,6 +15,7 @@
 
       pkgs.discord
       pkgs.spotify
+      pkgs.telegram-desktop
 
       pkgs.opencode
       pkgs.claude-code
