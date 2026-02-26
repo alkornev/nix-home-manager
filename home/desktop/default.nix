@@ -95,6 +95,20 @@
       titlebar-font = "Ubuntu Nerd Font Bold 13";
     };
 
+    # Power management settings to prevent automatic suspend
+    "org/gnome/settings-daemon/plugins/power" = {
+      # Disable automatic suspend on AC power
+      sleep-inactive-ac-timeout = 0;
+      sleep-inactive-ac-type = "nothing";
+
+      # Disable automatic suspend on battery power
+      sleep-inactive-battery-timeout = 0;
+      sleep-inactive-battery-type = "nothing";
+
+      # Disable power button action (prevent spurious ACPI events from triggering suspend)
+      power-button-action = "nothing";
+    };
+
   };
 
   # PaperWM copies metadata.json and user.css from the Nix store with read-only

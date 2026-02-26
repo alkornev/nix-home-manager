@@ -65,6 +65,9 @@
   hardware.bluetooth.powerOnBoot = true;
   # services.blueman.enable = true;
 
+  # Enable udev rules for game controllers
+  services.udev.packages = with pkgs; [ game-devices-udev-rules ];
+
   # Set your time zone
   time.timeZone = "Europe/Belgrade";
 
@@ -92,6 +95,7 @@
       "video"
       "render"
       "seat"
+      "input"
     ];
     packages = with pkgs; [ ];
     shell = pkgs.zsh;
