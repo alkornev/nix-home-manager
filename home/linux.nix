@@ -8,6 +8,8 @@
   imports = [
     ./programs
     ./desktop
+    ./desktop/ollama.nix
+    ./desktop/opencode.nix
     ./common.nix
   ];
 
