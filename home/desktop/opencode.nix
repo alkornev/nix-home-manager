@@ -14,6 +14,9 @@
           "qwen3-coder:30b-a3b-q4_K_M" = {
             name = "Qwen3 Coder 30B (Q4)";
           };
+          "qwen2.5-coder:7b" = {
+            name = "Qwen2.5 Coder 7B";
+          };
         };
       };
     };

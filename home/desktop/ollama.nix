@@ -9,7 +9,7 @@
     };
 
     Service = {
-      ExecStart = "${pkgs.ollama}/bin/ollama serve";
+      ExecStart = "${pkgs.ollama-cuda}/bin/ollama serve";
       Restart = "on-failure";
       RestartSec = 3;
       # Optional: set models directory
