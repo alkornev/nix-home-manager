@@ -63,7 +63,17 @@
   # Enable Bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+
+  # Xbox controller Bluetooth support
+  hardware.xpadneo.enable = true;
   # services.blueman.enable = true;
+
+  # Sensor configuration to hide bogus readings
+  environment.etc."sensors.d/custom.conf".text = ''
+    # Ignore non-existent Thermistor 0 on nct6687 (shows -40°C, not physically connected)
+    chip "nct6687-*"
+        ignore temp6
+  '';
 
   # Enable udev rules for game controllers
   services.udev.packages = with pkgs; [ game-devices-udev-rules ];
