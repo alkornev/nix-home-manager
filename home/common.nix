@@ -4,6 +4,7 @@
   home = {
     packages = [
       pkgs.home-manager
+      pkgs.devenv
       pkgs.htop
       pkgs.unzip
       pkgs.nixfmt
