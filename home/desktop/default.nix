@@ -2,6 +2,12 @@
 { pkgs, lib, ... }:
 
 {
+
+  home.packages = with pkgs; [
+    yaru-theme
+    ubuntu-themes
+  ];
+
   dconf.settings = {
 
     "org/gnome/shell" = {
@@ -19,12 +25,6 @@
         "org.gnome.Nautilus.desktop"
         "Alacritty.desktop"
       ];
-    };
-
-    # Set Alacritty as default terminal
-    "org/gnome/desktop/applications/terminal" = {
-      exec = "alacritty";
-      exec-arg = "-e";
     };
 
     "org/gnome/desktop/peripherals/keyboard" = {
@@ -52,9 +52,15 @@
 
     # Disable the dock's Super+q keybinding
     "org/gnome/shell/extensions/dash-to-dock" = {
+      dock-position = "LEFT";
+      dock-fixed = true;
+      dash-max-icon-size = 48;
+      extend-height = true;
+      #apply-custom-theme = true;
+      custom-theme-shrink = true;
+      running-indicator-style = "DOTS";
+      show-trash = true;
       hot-keys = false; # Disables all dock hotkeys including Super+q
-      extend-height = false;
-      dock-fixed = true; # Don't reserve space permanently
     };
 
     "org/gnome/shell/extensions/paperwm/keybindings" = {
@@ -64,10 +70,12 @@
     "org/gnome/desktop/wm/keybindings" = {
       close = [ "<Super>q" ];
       toggle-maximized = [ "<Super>m" ];
-    };
-
-    "org/gnome/settings-daemon/plugins/media-keys" = {
-      terminal = [ "<Super>Return" ];
+      switch-windows = [ "<Alt>Tab" ];
+      switch-windows-backward = [ "<Shift><Alt>Tab" ];
+      switch-applications = [];
+      switch-applications-backward = [];
+      minimize = [ "<Super>h" ];
+      maximize = [];
     };
 
     # Interface fonts
@@ -88,11 +96,14 @@
 
       clock-show-seconds = true;
       clock-show-weekday = true;
+      enable-hot-corners = false;
     };
 
     # Window title font
     "org/gnome/desktop/wm/preferences" = {
       titlebar-font = "Ubuntu Nerd Font Bold 13";
+
+      button-layout =  "appmenu:minimize,maximize,close";
     };
 
     # Power management settings to prevent automatic suspend
@@ -100,15 +111,21 @@
       # Disable automatic suspend on AC power
       sleep-inactive-ac-timeout = 0;
       sleep-inactive-ac-type = "nothing";
-
-      # Disable automatic suspend on battery power
-      sleep-inactive-battery-timeout = 0;
-      sleep-inactive-battery-type = "nothing";
-
-      # Disable power button action (prevent spurious ACPI events from triggering suspend)
       power-button-action = "nothing";
     };
 
+
+    # Nautilus
+    "org/gnome/nautilus/preferences" = {
+      default-folder-viewer = "list-view";
+      show-hidden-files = false;
+    };
+
+    "org/gnome/nautilus/list-view" = {
+      default-visible-columns = [ "name" "size" "type" "date_modified" ];
+      default-zoom-level = "small";   # "small", "medium", "large"
+      use-tree-view = true;
+    };
   };
 
   # PaperWM copies metadata.json and user.css from the Nix store with read-only
@@ -123,6 +140,21 @@
   # GTK font settings
   gtk = {
     enable = true;
+
+    theme = {
+      name = "Yaru-dark";
+      package = pkgs.yaru-theme;
+    };
+
+    iconTheme = {
+      name = "Yaru-dark";
+      package = pkgs.yaru-theme;
+    };
+
+    cursorTheme = {
+      name = "Yaru";
+      size = 24;
+    };
 
     font = {
       name = "Ubuntu Nerd Font";
