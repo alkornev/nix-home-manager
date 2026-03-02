@@ -1,7 +1,7 @@
 {
   programs.zellij = {
     enable = true;
-    enableZshIntegration = true; # auto-start zellij in zsh
+    enableZshIntegration = false; # auto-start managed manually in zsh.nix
     settings = {
       theme = "nord"; # or "nord", "gruvbox-dark", "dracula"
       default_shell = "zsh";

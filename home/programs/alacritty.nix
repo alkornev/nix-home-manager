@@ -3,8 +3,7 @@
     enable = true;
     settings = {
       terminal.shell = {
-        program = "zsh";
-        args = [ "--login" ];
+        program = "zellij";
       };
 
       # keyboard.bindings = [
