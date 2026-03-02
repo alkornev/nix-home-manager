@@ -123,6 +123,11 @@
     "flakes"
   ];
 
+  nix.settings.trusted-users = [
+    "root"
+    username
+  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -136,6 +141,7 @@
     mesa-demos
     wsdd
     lm_sensors
+    nix-ld
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

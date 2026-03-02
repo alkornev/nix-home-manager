@@ -13,7 +13,6 @@
     "org/gnome/shell" = {
       disable-user-extensions = false;
       enabled-extensions = [
-        "blur-my-shell@aunetx"
         "clipboard-indicator@tudmotu.com"
         "dash-to-dock@micxgx.gmail.com"
         "Vitals@CoreCoding.com"
@@ -72,10 +71,10 @@
       toggle-maximized = [ "<Super>m" ];
       switch-windows = [ "<Alt>Tab" ];
       switch-windows-backward = [ "<Shift><Alt>Tab" ];
-      switch-applications = [];
-      switch-applications-backward = [];
+      switch-applications = [ ];
+      switch-applications-backward = [ ];
       minimize = [ "<Super>h" ];
-      maximize = [];
+      maximize = [ ];
     };
 
     # Interface fonts
@@ -94,6 +93,7 @@
       font-hinting = "slight"; # Slight hinting
       font-rgba-order = "rgb"; # Subpixel order
 
+      accent-color = "blue";
       clock-show-seconds = true;
       clock-show-weekday = true;
       enable-hot-corners = false;
@@ -103,7 +103,7 @@
     "org/gnome/desktop/wm/preferences" = {
       titlebar-font = "Ubuntu Nerd Font Bold 13";
 
-      button-layout =  "appmenu:minimize,maximize,close";
+      button-layout = "appmenu:minimize,maximize,close";
     };
 
     # Power management settings to prevent automatic suspend
@@ -114,7 +114,6 @@
       power-button-action = "nothing";
     };
 
-
     # Nautilus
     "org/gnome/nautilus/preferences" = {
       default-folder-viewer = "list-view";
@@ -122,8 +121,13 @@
     };
 
     "org/gnome/nautilus/list-view" = {
-      default-visible-columns = [ "name" "size" "type" "date_modified" ];
-      default-zoom-level = "small";   # "small", "medium", "large"
+      default-visible-columns = [
+        "name"
+        "size"
+        "type"
+        "date_modified"
+      ];
+      default-zoom-level = "small"; # "small", "medium", "large"
       use-tree-view = true;
     };
   };
