@@ -1,9 +1,10 @@
+{ pkgs, ... }:
 {
   programs.alacritty = {
     enable = true;
     settings = {
       terminal.shell = {
-        program = "zellij";
+        program = "${pkgs.zellij}/bin/zellij";
       };
 
       # keyboard.bindings = [
