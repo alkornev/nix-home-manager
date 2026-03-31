@@ -12,6 +12,7 @@
 {
   imports = [
     # Include the results of the hardware scan.
+    ./cachix.nix
     ./gnome.nix
     ./nvidia.nix
     ./virtualization.nix
@@ -131,6 +132,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    cachix
     git
     wget
     htop
