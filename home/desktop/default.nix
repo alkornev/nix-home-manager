@@ -1,5 +1,5 @@
 # home/desktop/gnome.nix
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 {
 
@@ -164,5 +164,7 @@
       name = "Ubuntu Nerd Font";
       size = 11;
     };
+
+    gtk4.theme = config.gtk.theme;
   };
 }

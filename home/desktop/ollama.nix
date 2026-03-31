@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  home.packages = [ pkgs.ollama-cuda ];
+  home.packages = [ pkgs.ollama ];
 
   systemd.user.services.ollama = {
     Unit = {
@@ -9,7 +9,7 @@
     };
 
     Service = {
-      ExecStart = "${pkgs.ollama-cuda}/bin/ollama serve";
+      ExecStart = "${pkgs.ollama}/bin/ollama serve";
       Restart = "on-failure";
       RestartSec = 3;
       # Optional: set models directory

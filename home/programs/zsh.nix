@@ -47,6 +47,12 @@
         "zsh-users/zsh-completions"
       ];
     };
+    initExtraFirst = ''
+      # oh-my-zsh docker plugin copies from Nix store (0444), making the cache read-only.
+      # Make it writable before plugins load so it can be overwritten each time.
+      chmod u+w "$HOME/.cache/oh-my-zsh/completions/_docker" 2>/dev/null || true
+    '';
+
     initContent = ''
       # Additional history options not covered by Home Manager
       setopt HIST_REDUCE_BLANKS     # Remove superfluous blanks before recording entry.
