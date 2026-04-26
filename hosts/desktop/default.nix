@@ -15,6 +15,7 @@
     ./cachix.nix
     ./gnome.nix
     ./nvidia.nix
+    ./ollama.nix
     ./virtualization.nix
     /etc/nixos/hardware-configuration.nix
   ];

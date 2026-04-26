@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   programs.firefox = {
     enable = true;
     package = pkgs.firefox-bin;
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
     profiles.default.settings = {
       "mousewheel.min_line_scroll_amount" = 40;
       "general.smoothScroll.mouseWheel.durationMaxMS" = 200;
