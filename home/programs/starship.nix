@@ -43,7 +43,6 @@
         min_time = 0;
         style = "bold yellow";
         format = "[$duration]($style) ";
-        show_milliseconds = true;
       };
 
       status = {

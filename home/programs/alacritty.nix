@@ -58,7 +58,7 @@
       };
 
       cursor = {
-        style = "Block";
+        style.shape = "Block";
         unfocused_hollow = true;
       };
     };
