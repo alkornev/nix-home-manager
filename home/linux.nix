@@ -27,6 +27,8 @@
 
       pkgs.wineWow64Packages.waylandFull
       pkgs.winetricks
+
+      pkgs.libreoffice-fresh
     ];
 
     inherit username;
