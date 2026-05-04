@@ -21,6 +21,7 @@
 
       pkgs.opencode
       pkgs.claude-code
+      pkgs.codex
     ];
   };
 }
