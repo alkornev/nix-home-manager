@@ -28,6 +28,7 @@
   boot.kernelParams = [
     "quiet"
     "splash"
+    "iommu=pt"
   ];
 
   boot.consoleLogLevel = 0;
@@ -42,8 +43,16 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages;
 
+  # Early AMD CPU microcode loading via initrd
+  hardware.cpu.amd.updateMicrocode = true;
+
   # Load fan controller module for MSI MPG X870E CARBON WIFI (Nuvoton NCT6687D)
-  boot.kernelModules = [ "nct6683" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.nct6687d ];
+  boot.kernelModules = [ "nct6687" ];
+  boot.extraModprobeConfig = ''
+    softdep nct6687 pre: i2c_i801
+    options nct6687 fan_config=msi_alt1 msi_fan_brute_force=1
+  '';
 
   networking.hostName = "desktop"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -70,11 +79,26 @@
   hardware.xpadneo.enable = true;
   # services.blueman.enable = true;
 
+  # Mystic Light / RAM / AIO RGB control
+  services.hardware.openrgb = {
+    enable = true;
+    motherboard = "amd";
+  };
+
+  # USB4 / Thunderbolt device authorization (ASMedia ASM4242)
+  services.hardware.bolt.enable = true;
+
   # Sensor configuration to hide bogus readings
   environment.etc."sensors.d/custom.conf".text = ''
     # Ignore non-existent Thermistor 0 on nct6687 (shows -40°C, not physically connected)
+    # Ignore M2_1 thermistor pad (shows 216°C — single-sided SSD, nothing for the pad to read)
+    # Ignore unused System Fan headers #2, #3, #6 (no fans connected)
     chip "nct6687-*"
         ignore temp6
+        ignore temp7
+        ignore fan4
+        ignore fan5
+        ignore fan8
   '';
 
   # Enable udev rules for game controllers
@@ -144,6 +168,8 @@
     mesa-demos
     wsdd
     lm_sensors
+    nvme-cli
+    smartmontools
   ];
 
   programs.nix-ld = {

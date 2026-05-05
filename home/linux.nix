@@ -29,6 +29,8 @@
       pkgs.winetricks
 
       pkgs.libreoffice-fresh
+
+      pkgs.uutils-coreutils-noprefix
     ];
 
     inherit username;
