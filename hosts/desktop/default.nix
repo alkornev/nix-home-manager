@@ -4,9 +4,6 @@
   username,
   ...
 }:
-let
-  unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
-in
 {
   # ─── Imports ────────────────────────────────────────────────
   imports = [
@@ -24,7 +21,7 @@ in
 
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
-    auto-optimize-store   = true;
+    auto-optimise-store   = true;
     keep-outputs          = true;
     keep-derivations      = true;
     trusted-users         = [ "root" "@wheel" ];
@@ -49,7 +46,7 @@ in
 
   boot.supportedFilesystems = [ "ntfs" ]; # Windows dual-boot / external drives
 
-  boot.kernelPackages = unstable.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.blacklistedKernelModules = [ "amdgpu" "radeon" "nct6683" ];
   boot.kernelParams = [
     "quiet"
@@ -74,6 +71,7 @@ in
   boot.extraModprobeConfig = ''
     softdep nct6687 pre: i2c_i801
     options nct6687 fan_config=msi_alt1 msi_fan_brute_force=1
+    options kvm_amd nested=1
   '';
 
   # ─── Hardware ───────────────────────────────────────────────
@@ -87,7 +85,7 @@ in
   zramSwap = {
     enable = true;
     algorithm = "zstd";
-    memoryPercent = 25; # 16 Gb
+    memoryPercent = 25;
   };
 
   services.scx = {
@@ -182,14 +180,16 @@ in
     isNormalUser = true;
     description = "Aleksei";
     extraGroups = [
-      "networkmanager"
-      "wheel"
-      "rtkit"
       "audio"
-      "video"
-      "render"
-      "seat"
       "input"
+      "kvm"
+      "libvirtd"
+      "networkmanager"
+      "render"
+      "rtkit"
+      "seat"
+      "video"
+      "wheel"
     ];
     packages = with pkgs; [ ];
     shell = pkgs.zsh;
@@ -212,8 +212,6 @@ in
     cachix
     git
     wget
-    htop
-    just
     direnv
     nvidia-container-toolkit
     pciutils
@@ -223,12 +221,9 @@ in
     nvopPackages.nviai
     vulkan-tools
     libva-utils
-    nvidia-vaapi-driver
 
-    unzip
     file
     ripgrep
-    fd
     jq
     tree
     dconf-editor
@@ -238,15 +233,12 @@ in
     lm_sensors
     nvme-cli
     smartmontools
-    ffmpeg
   ];
 
   # Wayland / NVIDIA / VA-API hints for browsers and the compositor.
   environment.sessionVariables = {
     NIXOS_OZONE_ML          = "1";
     MOZ_ENABLE_WAYLAND      = "1";
-    LIBVA_DRIVER_NAME       = "nvidia";
-    NVD_BACKEND             = "direct";
     MOZ_DISABLE_RDD_SANDBOX = "1";
     __GL_GSYNC_ALLOWED      = "1";
     __GL_VRR_ALLOWED        = "1";

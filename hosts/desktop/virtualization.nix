@@ -23,10 +23,6 @@
 
   boot.kernelModules = [ "kvm-amd" ];
 
-  boot.extraModprobeConfig = ''
-    options kvm_amd nested=1
-  '';
-
   virtualisation.libvirtd = {
     enable = true;
     qemu = {
@@ -55,9 +51,9 @@
     spice-gtk
   ];
 
+  # CDI: `podman run --device nvidia.com/gpu=all ...` (rootless adds `--security-opt label=disable`)
   hardware.nvidia-container-toolkit.enable = true;
   users.users.${username} = {
-    extraGroups = [ "kvm" "libvirtd" ];
     subUidRanges = [
       {
         startUid = 100000;

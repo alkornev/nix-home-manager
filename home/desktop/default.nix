@@ -13,6 +13,7 @@
     "org/gnome/shell" = {
       disable-user-extensions = false;
       enabled-extensions = [
+        "appindicatorsupport@rgcjonas.gmail.com"
         "clipboard-indicator@tudmotu.com"
         "dash-to-dock@micxgx.gmail.com"
         "Vitals@CoreCoding.com"
