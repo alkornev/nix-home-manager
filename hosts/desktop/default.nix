@@ -1,38 +1,65 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 {
   config,
   pkgs,
   username,
   ...
 }:
-
+let
+  unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
+in
 {
+  # ─── Imports ────────────────────────────────────────────────
   imports = [
-    # Include the results of the hardware scan.
     ./cachix.nix
     ./gnome.nix
+    ./nix-ld.nix
     ./nvidia.nix
     ./ollama.nix
     ./virtualization.nix
     /etc/nixos/hardware-configuration.nix
   ];
 
-  # Bootloader.
+  # ─── Nix / nixpkgs ──────────────────────────────────────────
+  nixpkgs.config.allowUnfree = true;
+
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    auto-optimize-store   = true;
+    keep-outputs          = true;
+    keep-derivations      = true;
+    trusted-users         = [ "root" "@wheel" ];
+  };
+
+  system.rebuild.enableNg = true;
+
+  programs.nh = {
+    enable = true;
+    flake = "/home/${username}/nix-home-manager";
+    clean = {
+      enable = true;
+      extraArgs = "--keep-since 7d --keep 5";
+    };
+  };
+
+  # ─── Boot & kernel ──────────────────────────────────────────
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = [ "ntfs" ];
+  boot.loader.timeout = 3;
+
+  boot.supportedFilesystems = [ "ntfs" ]; # Windows dual-boot / external drives
+
+  boot.kernelPackages = unstable.linuxPackages_latest;
+  boot.blacklistedKernelModules = [ "amdgpu" "radeon" "nct6683" ];
   boot.kernelParams = [
     "quiet"
     "splash"
     "iommu=pt"
+    "amd_pstate=active"
   ];
 
-  boot.consoleLogLevel = 0;
-  boot.initrd.verbose = false;
+  boot.tmp.useTmpfs = true;
+  boot.tmp.tmpfsSize = "32G";
 
   boot.plymouth = {
     enable = true;
@@ -40,44 +67,47 @@
     themePackages = [ pkgs.nixos-bgrt-plymouth ];
   };
 
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages;
-
-  # Early AMD CPU microcode loading via initrd
-  hardware.cpu.amd.updateMicrocode = true;
-
-  # Load fan controller module for MSI MPG X870E CARBON WIFI (Nuvoton NCT6687D)
+  # Fan controller for MSI MPG X870E CARBON WIFI (Nuvoton NCT6687D):
+  # softdep ensures i2c_i801 loads first; msi_alt1 selects the right fan layout.
   boot.extraModulePackages = [ config.boot.kernelPackages.nct6687d ];
-  boot.kernelModules = [ "nct6687" ];
+  boot.kernelModules = [ "nct6687" "k10temp" ];
   boot.extraModprobeConfig = ''
     softdep nct6687 pre: i2c_i801
     options nct6687 fan_config=msi_alt1 msi_fan_brute_force=1
   '';
 
-  networking.hostName = "desktop"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # ─── Hardware ───────────────────────────────────────────────
+  hardware.cpu.amd.updateMicrocode       = true;
+  hardware.enableAllFirmware             = true;
+  hardware.enableRedistributableFirmware = true;
+  services.fwupd.enable                  = true;
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  powerManagement.cpuFreqGovernor = "performance";
 
-  # clean up garbage
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 25; # 16 Gb
   };
 
-  # Enable networking
-  networking.networkmanager.enable = true;
+  services.scx = {
+    enable = true;
+    scheduler = "scx_lavd";
+  };
 
-  # Enable Bluetooth
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+  services.fstrim.enable = true;
 
-  # Xbox controller Bluetooth support
-  hardware.xpadneo.enable = true;
-  # services.blueman.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings.General = {
+      Experimental = true;       # LE Audio, BAP, battery reporting
+      KernelExperimental = true;
+      FastConnectable = true;
+    };
+  };
+
+  hardware.xpadneo.enable = true; # Xbox controller Bluetooth support
 
   # Mystic Light / RAM / AIO RGB control
   services.hardware.openrgb = {
@@ -88,38 +118,66 @@
   # USB4 / Thunderbolt device authorization (ASMedia ASM4242)
   services.hardware.bolt.enable = true;
 
-  # Sensor configuration to hide bogus readings
-  environment.etc."sensors.d/custom.conf".text = ''
-    # Ignore non-existent Thermistor 0 on nct6687 (shows -40°C, not physically connected)
-    # Ignore M2_1 thermistor pad (shows 216°C — single-sided SSD, nothing for the pad to read)
-    # Ignore unused System Fan headers #2, #3, #6 (no fans connected)
-    chip "nct6687-*"
-        ignore temp6
-        ignore temp7
-        ignore fan4
-        ignore fan5
-        ignore fan8
-  '';
-
-  # Enable udev rules for game controllers
   services.udev.packages = with pkgs; [ game-devices-udev-rules ];
 
-  # Set your time zone
-  time.timeZone = "Europe/Belgrade";
+  # ─── Networking ─────────────────────────────────────────────
+  networking.hostName = "desktop";
+  networking.networkmanager.enable = true;
 
-  # Select internationalisation properties.
+  # Local network discovery (mDNS): printers, GsConnect peers, `host.local` hostnames.
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      userServices = true;
+    };
+  };
+
+  # ─── Audio ──────────────────────────────────────────────────
+  security.rtkit.enable = true;
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
+    wireplumber.enable = true;
+
+    # High-quality BT audio codecs (SBC-XQ, mSBC, hardware volume).
+    wireplumber.extraConfig.bluetoothEnhancements = {
+      "monitor.bluez.properties" = {
+        "bluez5.enable-sbc-xq" = true;
+        "bluez5.enable-msbc" = true;
+        "bluez5.enable-hw-volume" = true;
+        "bluez5.roles" = [
+          "hsp_hs"
+          "hsp_ag"
+          "hfp_hf"
+          "hfp_ag"
+        ];
+      };
+    };
+  };
+
+  services.pulseaudio.enable = false;
+
+  # ─── Locale & input ─────────────────────────────────────────
+  time.timeZone = "Europe/Belgrade";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us,ru";
     variant = "";
     options = "grp:alt_shift_toggle";
   };
 
+  # ─── Users & shells ─────────────────────────────────────────
   security.sudo.wheelNeedsPassword = false;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${username} = {
     isNormalUser = true;
     description = "Aleksei";
@@ -137,25 +195,19 @@
     shell = pkgs.zsh;
   };
 
-  # Use zsh system-wide
   programs.zsh.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  # ─── Desktop apps / system programs ─────────────────────────
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ username ];
+  };
 
-  # Enable Nix Flakes
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  services.power-profiles-daemon.enable = true;
+  services.dbus.implementation = "broker";
 
-  nix.settings.trusted-users = [
-    "root"
-    username
-  ];
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # ─── System packages ────────────────────────────────────────
   environment.systemPackages = with pkgs; [
     cachix
     git
@@ -165,57 +217,41 @@
     direnv
     nvidia-container-toolkit
     pciutils
+    usbutils
+    inxi
+    btop
+    nvopPackages.nviai
+    vulkan-tools
+    libva-utils
+    nvidia-vaapi-driver
+
+    unzip
+    file
+    ripgrep
+    fd
+    jq
+    tree
+    dconf-editor
+
     mesa-demos
     wsdd
     lm_sensors
     nvme-cli
     smartmontools
+    ffmpeg
   ];
 
-  programs.nix-ld = {
-    enable = true;
-    libraries = with pkgs; [
-      stdenv.cc.cc.lib # or libstdc++
-      zlib
-    ];
+  # Wayland / NVIDIA / VA-API hints for browsers and the compositor.
+  environment.sessionVariables = {
+    NIXOS_OZONE_ML          = "1";
+    MOZ_ENABLE_WAYLAND      = "1";
+    LIBVA_DRIVER_NAME       = "nvidia";
+    NVD_BACKEND             = "direct";
+    MOZ_DISABLE_RDD_SANDBOX = "1";
+    __GL_GSYNC_ALLOWED      = "1";
+    __GL_VRR_ALLOWED        = "1";
   };
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-  security.rtkit.enable = true;
-
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    wireplumber.enable = true;
-  };
-
-  services.pulseaudio.enable = false; # Ensure this is false
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
-
+  # ─── System state ───────────────────────────────────────────
+  system.stateVersion = "25.11";
 }
