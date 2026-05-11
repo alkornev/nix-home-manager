@@ -29,7 +29,7 @@
 
     "org/gnome/desktop/peripherals/keyboard" = {
       delay = lib.hm.gvariant.mkUint32 225; # 15 * 15ms = 225ms (matches macOS InitialKeyRepeat 15)
-      repeat-interval = lib.hm.gvariant.mkUint32 15; # 1 * 15ms = 15ms (matches macOS KeyRepeat 1)
+      repeat-interval = lib.hm.gvariant.mkUint32 20; # 1 * 15ms = 15ms (matches macOS KeyRepeat 1)
     };
 
     # PaperWM specific settings

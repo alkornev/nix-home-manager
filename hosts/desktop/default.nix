@@ -12,6 +12,7 @@
     ./nix-ld.nix
     ./nvidia.nix
     ./ollama.nix
+    ./system-tools.nix
     ./virtualization.nix
     /etc/nixos/hardware-configuration.nix
   ];
@@ -26,8 +27,6 @@
     keep-derivations      = true;
     trusted-users         = [ "root" "@wheel" ];
   };
-
-  system.rebuild.enableNg = true;
 
   programs.nh = {
     enable = true;
@@ -218,7 +217,6 @@
     usbutils
     inxi
     btop
-    nvopPackages.nviai
     vulkan-tools
     libva-utils
 

@@ -18,10 +18,15 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    {
+    inputs@{
       self,
       nixpkgs,
       home-manager,
@@ -47,7 +52,7 @@
         system = "x86_64-linux";
         modules = [ ./hosts/desktop ];
         specialArgs = {
-          inherit username;
+          inherit username inputs;
         };
       };
 
@@ -60,7 +65,7 @@
             nixvim.homeModules.nixvim
           ];
           extraSpecialArgs = {
-            inherit username;
+            inherit username inputs;
           };
         };
 

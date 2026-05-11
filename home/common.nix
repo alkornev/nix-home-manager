@@ -15,6 +15,15 @@
       pkgs.fzf
       pkgs.ffmpeg
 
+      pkgs.bat
+      pkgs.eza
+      pkgs.dust
+      pkgs.duf
+      pkgs.procs
+      pkgs.hexyl
+      pkgs.hyperfine
+      pkgs.sd
+
       pkgs.discord
       pkgs.spotify
       pkgs.telegram-desktop
@@ -24,5 +33,15 @@
       pkgs.claude-code
       pkgs.codex
     ];
+  };
+
+  programs.bat.enable = true;
+  programs.eza = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
   };
 }

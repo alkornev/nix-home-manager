@@ -2,6 +2,7 @@
   lib,
   pkgs,
   username,
+  inputs,
   ...
 }:
 {
@@ -10,6 +11,7 @@
     ./desktop
     ./desktop/opencode.nix
     ./common.nix
+    inputs.nix-index-database.homeModules.nix-index
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -19,6 +21,8 @@
     enableZshIntegration = true;
     nix-direnv.enable = true;
   };
+
+  programs.nix-index-database.comma.enable = true;
 
 
   home = {
@@ -31,6 +35,8 @@
       pkgs.libreoffice-fresh
 
       pkgs.uutils-coreutils-noprefix
+
+      pkgs.wl-clipboard
     ];
 
     inherit username;
