@@ -1,4 +1,14 @@
 {
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      navigate = true;
+      line-numbers = true;
+      side-by-side = false;
+    };
+  };
+
   programs.git = {
     enable = true;
 
@@ -25,6 +35,18 @@
       init = {
         defaultBranch = "main";
       };
+
+      pull = {
+        rebase = true;
+        ff = "only";
+      };
+
+      rerere.enabled = true;
+      merge.conflictstyle = "zdiff3";
+      diff.algorithm = "histogram";
+      branch.sort = "-committerdate";
+      column.ui = "auto";
+      fetch.prune = true;
       alias = {
 
         ls = "ls-files";

@@ -13,6 +13,7 @@
       pkgs.just
       pkgs.fd
       pkgs.fzf
+      pkgs.ffmpeg
 
       pkgs.discord
       pkgs.spotify

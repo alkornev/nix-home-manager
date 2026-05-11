@@ -94,6 +94,7 @@
       font-rgba-order = "rgb"; # Subpixel order
 
       accent-color = "blue";
+      color-scheme = "prefer-dark";
       clock-show-seconds = true;
       clock-show-weekday = true;
       enable-hot-corners = false;

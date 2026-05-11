@@ -9,12 +9,23 @@
   boot.kernelParams = [
     "nvidia.NVreg_DynamicPowerManagement=2"
     "nvidia.NVreg_TemporaryFilePath=/var/tmp"
+    # Defensive: re-pin params that disappeared between nixpkgs revisions.
+    "nvidia-drm.modeset=1"
+    "nvidia-drm.fbdev=1"
+    "nvidia.NVreg_UseKernelSuspendNotifiers=1"
+    "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
   ];
 
   # Enable OpenGL
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+    extraPackages = with pkgs; [ nvidia-vaapi-driver ];
+  };
+
+  environment.sessionVariables = {
+    NVD_BACKEND = "direct";
+    LIBVA_DRIVER_NAME = "nvidia";
   };
 
   # Load nvidia driver for Xorg and Wayland
@@ -48,6 +59,22 @@
     nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
+  };
+
+  hardware.nvidia.nvidiaPersistenced = true;
+
+  systemd.services.nvidia-tune = {
+    description = "Apply NVIDIA GPU power limit";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "nvidia-persistenced.service" ];
+    requires = [ "nvidia-persistenced.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -pl 450
+    '';
   };
 }

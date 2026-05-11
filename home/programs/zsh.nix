@@ -3,8 +3,6 @@
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
 
     history = {
       size = 10000000;
@@ -20,8 +18,6 @@
       ignoreSpace = true;
       extended = true;
     };
-
-    historySubstringSearch.enable = true;
 
     shellAliases = {
       ll = "ls -la";
