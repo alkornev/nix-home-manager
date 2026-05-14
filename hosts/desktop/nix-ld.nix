@@ -42,8 +42,12 @@
 
     vulkan-loader
 
-    cudaPackages.cuda_cudart
-    cudaPackages.cudnn
+    # Intentionally NOT exposing cudaPackages.cudnn / cuda_cudart here.
+    # PyTorch / JAX / TF wheels ship their own (newer) cuDNN + cudart inside
+    # the venv (e.g. venv/lib/python*/site-packages/nvidia/cudnn/lib). When the
+    # nix-ld copy is older it shadows cuDNN's lazily-dlopen'd sub-libs
+    # (libcudnn_engines_*.so, etc.) and torch aborts with a version skew.
+    # Per-project .envrc prepends `$PWD/venv/.../nvidia/*/lib` to LD_LIBRARY_PATH.
 
     ffmpeg
 

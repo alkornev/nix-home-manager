@@ -97,12 +97,20 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    settings.General = {
-      Experimental = true;       # LE Audio, BAP, battery reporting
-      KernelExperimental = true;
-      FastConnectable = true;
+    settings = {
+      General = {
+        Experimental = true;       # LE Audio, BAP, battery reporting
+        KernelExperimental = true;
+        FastConnectable = true;
+      };
+      Policy.AutoEnable = true;    # auto-reconnect known devices on resume/boot
     };
   };
+
+  # Bridge AVRCP commands from BT headphones (AirPods taps, etc.) to MPRIS
+  # so play/pause from the earbuds reaches GNOME media players.
+  # mpris-proxy.service is shipped by bluez; we just enable it.
+  systemd.user.services.mpris-proxy.wantedBy = [ "default.target" ];
 
   hardware.xpadneo.enable = true; # Xbox controller Bluetooth support
 
@@ -144,12 +152,13 @@
     jack.enable = true;
     wireplumber.enable = true;
 
-    # High-quality BT audio codecs (SBC-XQ, mSBC, hardware volume).
+    # High-quality BT audio codecs (SBC-XQ, mSBC, AAC, hardware volume).
     wireplumber.extraConfig.bluetoothEnhancements = {
       "monitor.bluez.properties" = {
         "bluez5.enable-sbc-xq" = true;
         "bluez5.enable-msbc" = true;
         "bluez5.enable-hw-volume" = true;
+        "bluez5.codecs" = "aac sbc sbc_xq aptx aptx_hd ldac";
         "bluez5.roles" = [
           "hsp_hs"
           "hsp_ag"
