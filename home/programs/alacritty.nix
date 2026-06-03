@@ -5,6 +5,7 @@
     settings = {
       terminal.shell = {
         program = "${pkgs.zellij}/bin/zellij";
+        args = [ "a" "-c" ];
       };
 
       # keyboard.bindings = [
